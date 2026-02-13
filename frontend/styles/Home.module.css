@@ -403,6 +403,51 @@
   margin: 0;
 }
 
+/* Click Hint Overlay */
+.clickHint {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(6px);
+  color: #be185d;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(236, 72, 153, 0.25);
+  opacity: 1;
+  transition: all 0.3s ease;
+  z-index: 6;
+  animation: hintPulse 2.5s ease-in-out infinite;
+  pointer-events: auto;
+}
+
+.clickHint:hover {
+  background: linear-gradient(135deg, #ec4899, #db2777);
+  color: white;
+  transform: scale(1.08);
+  box-shadow: 0 6px 20px rgba(236, 72, 153, 0.4);
+}
+
+.clickHintIcon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+@keyframes hintPulse {
+  0%, 100% {
+    box-shadow: 0 4px 16px rgba(236, 72, 153, 0.25);
+  }
+  50% {
+    box-shadow: 0 4px 24px rgba(236, 72, 153, 0.45);
+  }
+}
+
 .sectionTitle::before,
 .sectionTitle::after {
   content: '♥';

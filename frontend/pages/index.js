@@ -225,6 +225,15 @@ export default function Home() {
                             onLoad={() => setImageLoading(false)}
                             onError={() => { setImageLoading(false); setImageError(true); }}
                           />
+                          {!imageLoading && (
+                            <div
+                              className={styles.clickHint}
+                              onClick={() => { setModalImageLoading(true); setModalImageIndex(currentPhotoIndex); }}
+                            >
+                              <span className={styles.clickHintIcon}>🔍</span>
+                              <span>Toca para ver completa</span>
+                            </div>
+                          )}
                         )}
                         <div className={styles.carouselCaption}>
                           <h3>{photos[currentPhotoIndex].title}</h3>
