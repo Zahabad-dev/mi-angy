@@ -1,39 +1,45 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import Head from 'next/head';
 import styles from '../styles/Home.module.css';
 
+// Datos estáticos embebidos (sin necesidad de API)
+const generatePhotos = () => {
+  const photos = [];
+  for (let i = 1; i <= 163; i++) {
+    photos.push({
+      id: i,
+      title: `Foto ${i}`,
+      url: `/images/foto1 (${i}).jpg`,
+      description: `Momento especial ${i}`
+    });
+  }
+  return photos;
+};
+
+const staticPhotos = generatePhotos();
+const staticSongs = [
+  { id: 1, title: 'Mi Fe', artist: 'Adán Jodorowsky', url: '/audio/Adan Jodorowsky -  Mi Fe.mp3', duration: 240 },
+  { id: 2, title: 'Andrea', artist: 'Bad Bunny', url: '/audio/Bad Bunny - Andrea.mp3', duration: 210 },
+  { id: 3, title: 'Departamento', artist: 'Bandalos Chinos', url: '/audio/Bandalos Chinos - Departamento.mp3', duration: 180 },
+  { id: 4, title: 'Inevitable', artist: 'Camilo Séptimo', url: '/audio/Camilo Séptimo - Inevitable.mp3', duration: 200 },
+  { id: 5, title: 'Vida En El Espejo', artist: 'Enjambre', url: '/audio/Enjambre - Vida En El Espejo.mp3', duration: 250 }
+];
+const staticVideo = {
+  id: 1,
+  title: 'MIANGY - Nuestro Video Especial',
+  url: '/videos/MIANGY.mp4',
+  thumbnail: '/videos/MIANGY.mp4',
+  duration: 0
+};
+
 export default function Home() {
-  const [photos, setPhotos] = useState([]);
-  const [songs, setSongs] = useState([]);
-  const [mainVideo, setMainVideo] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [photos] = useState(staticPhotos);
+  const [songs] = useState(staticSongs);
+  const [mainVideo] = useState(staticVideo);
+  const [loading] = useState(false);
   const [currentSongId, setCurrentSongId] = useState(null);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const [modalImageIndex, setModalImageIndex] = useState(null);
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      const [photosRes, songsRes, videoRes] = await Promise.all([
-        axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/photos`),
-        axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/songs`),
-        axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/video`)
-      ]);
-
-      if (photosRes.data.success) setPhotos(photosRes.data.photos);
-      if (songsRes.data.success) setSongs(songsRes.data.songs);
-      if (videoRes.data.success) setMainVideo(videoRes.data.video);
-    } catch (err) {
-      console.error('Error fetching data:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const formatDuration = (seconds) => {
     if (!seconds) return '0:00';
