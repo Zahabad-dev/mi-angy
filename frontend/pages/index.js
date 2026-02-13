@@ -43,6 +43,9 @@ export default function Home() {
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [videoPassword, setVideoPassword] = useState('');
   const [passwordError, setPasswordError] = useState(false);
+  const [imageLoading, setImageLoading] = useState(true);
+  const [modalImageLoading, setModalImageLoading] = useState(true);
+  const [imageError, setImageError] = useState(false);
 
   const handleVideoDownload = () => {
     setShowPasswordModal(true);
@@ -69,14 +72,23 @@ export default function Home() {
   };
 
   const nextPhoto = () => {
+    if (imageLoading) return;
+    setImageLoading(true);
+    setImageError(false);
     setCurrentPhotoIndex((prev) => (prev + 1) % photos.length);
   };
 
   const prevPhoto = () => {
+    if (imageLoading) return;
+    setImageLoading(true);
+    setImageError(false);
     setCurrentPhotoIndex((prev) => (prev - 1 + photos.length) % photos.length);
   };
 
   const goToPhoto = (index) => {
+    if (index === currentPhotoIndex) return;
+    setImageLoading(true);
+    setImageError(false);
     setCurrentPhotoIndex(index);
   };
 
@@ -178,7 +190,9 @@ export default function Home() {
                   <button 
                     className={styles.carouselButton + ' ' + styles.prevButton}
                     onClick={prevPhoto}
+                    disabled={imageLoading}
                     title="Foto anterior (flecha izquierda)"
+                    style={{ opacity: imageLoading ? 0.5 : 1 }}
                   >
                     ❮
                   </button>
@@ -186,13 +200,32 @@ export default function Home() {
                   <div className={styles.carouselSlide}>
                     {photos[currentPhotoIndex] && (
                       <div className={styles.carouselImageWrapper}>
-                        <img
-                          src={photos[currentPhotoIndex].url}
-                          alt={photos[currentPhotoIndex].title}
-                          className={styles.carouselImage}
-                          onClick={() => setModalImageIndex(currentPhotoIndex)}
-                          style={{ cursor: 'pointer' }}
-                        />
+                        {imageLoading && (
+                          <div className={styles.imageLoader}>
+                            <div className={styles.loaderBubble}>
+                              <span className={styles.loaderHeart}>💗</span>
+                              <p className={styles.loaderText}>Cargando foto...</p>
+                            </div>
+                          </div>
+                        )}
+                        {imageError ? (
+                          <div className={styles.imageErrorFallback}>
+                            <span style={{ fontSize: '3rem' }}>📷</span>
+                            <p>No se pudo cargar la foto</p>
+                            <p style={{ fontSize: '0.85rem', opacity: 0.7 }}>Foto {currentPhotoIndex + 1}</p>
+                          </div>
+                        ) : (
+                          <img
+                            key={currentPhotoIndex}
+                            src={photos[currentPhotoIndex].url}
+                            alt={photos[currentPhotoIndex].title}
+                            className={styles.carouselImage}
+                            onClick={() => { if (!imageLoading) { setModalImageLoading(true); setModalImageIndex(currentPhotoIndex); } }}
+                            style={{ cursor: imageLoading ? 'wait' : 'pointer', opacity: imageLoading ? 0 : 1, transition: 'opacity 0.3s ease' }}
+                            onLoad={() => setImageLoading(false)}
+                            onError={() => { setImageLoading(false); setImageError(true); }}
+                          />
+                        )}
                         <div className={styles.carouselCaption}>
                           <h3>{photos[currentPhotoIndex].title}</h3>
                           <p>{photos[currentPhotoIndex].description}</p>
@@ -204,7 +237,9 @@ export default function Home() {
                   <button 
                     className={styles.carouselButton + ' ' + styles.nextButton}
                     onClick={nextPhoto}
+                    disabled={imageLoading}
                     title="Próxima foto (flecha derecha)"
+                    style={{ opacity: imageLoading ? 0.5 : 1 }}
                   >
                     ❯
                   </button>
@@ -301,11 +336,25 @@ export default function Home() {
             >
               ✕
             </button>
-            <img
-              src={photos[modalImageIndex].url}
-              alt={photos[modalImageIndex].title}
-              className={styles.modalImage}
-            />
+            <div style={{ position: 'relative', minHeight: '200px' }}>
+              {modalImageLoading && (
+                <div className={styles.imageLoader}>
+                  <div className={styles.loaderBubble}>
+                    <span className={styles.loaderHeart}>💗</span>
+                    <p className={styles.loaderText}>Cargando...</p>
+                  </div>
+                </div>
+              )}
+              <img
+                key={modalImageIndex}
+                src={photos[modalImageIndex].url}
+                alt={photos[modalImageIndex].title}
+                className={styles.modalImage}
+                style={{ opacity: modalImageLoading ? 0 : 1, transition: 'opacity 0.3s ease' }}
+                onLoad={() => setModalImageLoading(false)}
+                onError={() => setModalImageLoading(false)}
+              />
+            </div>
             <div className={styles.modalInfo}>
               <h2>{photos[modalImageIndex].title}</h2>
               <p>{photos[modalImageIndex].description}</p>
@@ -316,14 +365,14 @@ export default function Home() {
             <div className={styles.modalNavigation}>
               <button 
                 className={styles.modalNavButton}
-                onClick={() => setModalImageIndex((prev) => (prev - 1 + photos.length) % photos.length)}
+                onClick={() => { setModalImageLoading(true); setModalImageIndex((prev) => (prev - 1 + photos.length) % photos.length); }}
                 title="Anterior"
               >
                 ❮
               </button>
               <button 
                 className={styles.modalNavButton}
-                onClick={() => setModalImageIndex((prev) => (prev + 1) % photos.length)}
+                onClick={() => { setModalImageLoading(true); setModalImageIndex((prev) => (prev + 1) % photos.length); }}
                 title="Siguiente"
               >
                 ❯
