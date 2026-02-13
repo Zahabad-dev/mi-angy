@@ -18,7 +18,7 @@ const generatePhotos = () => {
     photos.push({
       id: i,
       title: `Foto ${i}`,
-      url: `/images/foto1 (${i}).jpg`,
+      url: `/images/foto1%20(${i}).jpg`,
       description: `Momento especial ${i}`
     });
   }
