@@ -26,7 +26,7 @@ const staticSongs = [
 ];
 const staticVideo = {
   id: 1,
-  title: 'MIANGY - Nuestro Video Especial',
+  title: 'MIANGY - Nuestra historia mi vida',
   url: '/videos/MIANGY.mp4',
   thumbnail: '/videos/MIANGY.mp4',
   duration: 0
@@ -185,7 +185,7 @@ export default function Home() {
           <>
             {/* Video Download Section */}
             <section className={styles.videoSection}>
-              <h2 className={styles.videoTitle}>Nuestro Video Especial</h2>
+              <h2 className={styles.videoTitle}>Nuestra historia mi vida</h2>
               <div className={styles.videoContainer} style={{ textAlign: 'center', padding: '40px 20px' }}>
                 <div style={{ fontSize: '4rem', marginBottom: '20px' }}>🎬</div>
                 <p style={{ color: '#9b7a87', marginBottom: '25px', fontSize: '1.1rem' }}>

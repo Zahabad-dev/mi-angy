@@ -36,7 +36,7 @@ const galleryData = {
   ],
   mainVideo: {
     id: 1,
-    title: 'MIANGY - Nuestro Video Especial',
+    title: 'MIANGY - Nuestra historia mi vida',
     url: '/videos/MIANGY.mp4',
     thumbnail: '/videos/MIANGY.mp4',
     duration: 0
@@ -142,7 +142,7 @@ app.post('/api/video', (req, res) => {
 
   galleryData.mainVideo = {
     id: 1,
-    title: title || 'Nuestro Video Especial',
+    title: title || 'Nuestra historia mi vida',
     url,
     thumbnail: thumbnail || galleryData.mainVideo.thumbnail,
     duration: duration || 0
