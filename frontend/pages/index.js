@@ -503,7 +503,7 @@ export default function Home() {
       {/* Footer */}
       <footer className={styles.footer}>
         <p className={styles.footerText}>
-          ♥ Durante este tiempo me lo pregunte, si era obsesión, si era ganar o si era controlar, pero nada de eso mi amor, esto en realidad fue AMOR, y el más verdadero ♥
+          ♥ Durante este tiempo me lo pregunte, si era obsesión, si era ganar o si era controlar, pero nada de eso mi amor, esto en realidad fue AMOR, y el más verdadero, por que no hay nada más real que sentir tu piel, que estar contigo abrazados en una tarde, que vivir un amor sin aburrirme nunca, eres mi realidad ♥
         </p>
       </footer>
     </div>
