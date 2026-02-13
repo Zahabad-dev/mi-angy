@@ -119,22 +119,38 @@ export default function Home() {
           </div>
         ) : (
           <>
-            {/* Video Section */}
-            {mainVideo && (
-              <section className={styles.videoSection}>
-                <h2 className={styles.videoTitle}>Nuestro Video Especial</h2>
-                <div className={styles.videoContainer}>
-                  <video
-                    className={styles.videoPlayer}
-                    controls
-                    poster={mainVideo.thumbnail}
-                  >
-                    <source src={mainVideo.url} type="video/mp4" />
-                    Tu navegador no soporta el tag de video.
-                  </video>
-                </div>
-              </section>
-            )}
+            {/* Video Download Section */}
+            <section className={styles.videoSection}>
+              <h2 className={styles.videoTitle}>Nuestro Video Especial</h2>
+              <div className={styles.videoContainer} style={{ textAlign: 'center', padding: '40px 20px' }}>
+                <div style={{ fontSize: '4rem', marginBottom: '20px' }}>🎬</div>
+                <p style={{ color: '#9b7a87', marginBottom: '25px', fontSize: '1.1rem' }}>
+                  Descarga nuestro video especial para verlo
+                </p>
+                <a
+                  href="https://drive.google.com/LINK_PENDIENTE"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'inline-block',
+                    background: 'linear-gradient(135deg, #ec4899, #db2777)',
+                    color: 'white',
+                    padding: '15px 40px',
+                    borderRadius: '50px',
+                    textDecoration: 'none',
+                    fontSize: '1.2rem',
+                    fontWeight: 'bold',
+                    boxShadow: '0 4px 15px rgba(236, 72, 153, 0.4)',
+                    transition: 'transform 0.3s, box-shadow 0.3s',
+                    cursor: 'pointer'
+                  }}
+                  onMouseOver={(e) => { e.target.style.transform = 'scale(1.05)'; e.target.style.boxShadow = '0 6px 20px rgba(236, 72, 153, 0.6)'; }}
+                  onMouseOut={(e) => { e.target.style.transform = 'scale(1)'; e.target.style.boxShadow = '0 4px 15px rgba(236, 72, 153, 0.4)'; }}
+                >
+                  💝 Descargar Video
+                </a>
+              </div>
+            </section>
 
             {/* Gallery Carousel Section */}
             <section className={styles.carouselSection}>
