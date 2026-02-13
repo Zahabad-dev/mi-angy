@@ -40,6 +40,26 @@ export default function Home() {
   const [currentSongId, setCurrentSongId] = useState(null);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const [modalImageIndex, setModalImageIndex] = useState(null);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [videoPassword, setVideoPassword] = useState('');
+  const [passwordError, setPasswordError] = useState(false);
+
+  const handleVideoDownload = () => {
+    setShowPasswordModal(true);
+    setVideoPassword('');
+    setPasswordError(false);
+  };
+
+  const checkPassword = () => {
+    if (videoPassword === 'angyteama123') {
+      setShowPasswordModal(false);
+      setVideoPassword('');
+      setPasswordError(false);
+      window.open('https://drive.google.com/uc?export=download&id=1vuR9x9wOeNaOCBSwoEpF9cUcm7jsNDDu', '_blank');
+    } else {
+      setPasswordError(true);
+    }
+  };
 
   const formatDuration = (seconds) => {
     if (!seconds) return '0:00';
@@ -127,17 +147,15 @@ export default function Home() {
                 <p style={{ color: '#9b7a87', marginBottom: '25px', fontSize: '1.1rem' }}>
                   Descarga nuestro video especial para verlo
                 </p>
-                <a
-                  href="https://drive.google.com/uc?export=download&id=1vuR9x9wOeNaOCBSwoEpF9cUcm7jsNDDu"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button
+                  onClick={handleVideoDownload}
                   style={{
                     display: 'inline-block',
                     background: 'linear-gradient(135deg, #ec4899, #db2777)',
                     color: 'white',
                     padding: '15px 40px',
                     borderRadius: '50px',
-                    textDecoration: 'none',
+                    border: 'none',
                     fontSize: '1.2rem',
                     fontWeight: 'bold',
                     boxShadow: '0 4px 15px rgba(236, 72, 153, 0.4)',
@@ -148,7 +166,7 @@ export default function Home() {
                   onMouseOut={(e) => { e.target.style.transform = 'scale(1)'; e.target.style.boxShadow = '0 4px 15px rgba(236, 72, 153, 0.4)'; }}
                 >
                   💝 Descargar Video
-                </a>
+                </button>
               </div>
             </section>
 
@@ -311,6 +329,75 @@ export default function Home() {
                 ❯
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Password Modal for Video */}
+      {showPasswordModal && (
+        <div 
+          style={{
+            position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
+            background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center',
+            justifyContent: 'center', zIndex: 10000
+          }}
+          onClick={() => setShowPasswordModal(false)}
+        >
+          <div 
+            style={{
+              background: 'linear-gradient(135deg, #fff5f7, #ffe0e6)',
+              borderRadius: '20px', padding: '40px', maxWidth: '400px', width: '90%',
+              textAlign: 'center', boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
+              position: 'relative'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setShowPasswordModal(false)}
+              style={{
+                position: 'absolute', top: '10px', right: '15px',
+                background: 'none', border: 'none', fontSize: '1.5rem',
+                cursor: 'pointer', color: '#9b7a87'
+              }}
+            >✕</button>
+            <div style={{ fontSize: '3rem', marginBottom: '15px' }}>🔒</div>
+            <h3 style={{ color: '#db2777', marginBottom: '10px', fontSize: '1.3rem' }}>
+              Video Privado
+            </h3>
+            <p style={{ color: '#9b7a87', marginBottom: '20px', fontSize: '0.95rem' }}>
+              Ingresa la contraseña para descargar
+            </p>
+            <input
+              type="password"
+              value={videoPassword}
+              onChange={(e) => { setVideoPassword(e.target.value); setPasswordError(false); }}
+              onKeyDown={(e) => e.key === 'Enter' && checkPassword()}
+              placeholder="Contraseña..."
+              style={{
+                width: '100%', padding: '12px 15px', borderRadius: '12px',
+                border: passwordError ? '2px solid #ef4444' : '2px solid #fbcfe8',
+                fontSize: '1rem', outline: 'none', textAlign: 'center',
+                boxSizing: 'border-box', marginBottom: '8px'
+              }}
+              autoFocus
+            />
+            {passwordError && (
+              <p style={{ color: '#ef4444', fontSize: '0.85rem', marginBottom: '10px' }}>
+                Contraseña incorrecta 💔
+              </p>
+            )}
+            <button
+              onClick={checkPassword}
+              style={{
+                marginTop: '10px', width: '100%', padding: '12px',
+                background: 'linear-gradient(135deg, #ec4899, #db2777)',
+                color: 'white', border: 'none', borderRadius: '12px',
+                fontSize: '1.1rem', fontWeight: 'bold', cursor: 'pointer',
+                boxShadow: '0 4px 15px rgba(236, 72, 153, 0.4)'
+              }}
+            >
+              💝 Descargar
+            </button>
           </div>
         </div>
       )}
