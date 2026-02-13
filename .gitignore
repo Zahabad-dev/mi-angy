@@ -43,3 +43,7 @@ Thumbs.db
 # Videos (too large for GitHub)
 frontend/public/videos/
 *.mp4
+
+# Original images backup (too large)
+frontend/public/images_original/
+optimize-images.js

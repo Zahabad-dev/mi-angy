@@ -103,6 +103,20 @@ export default function Home() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [photos.length]);
 
+  // Precargar fotos vecinas para navegación instantánea
+  useEffect(() => {
+    if (photos.length === 0) return;
+    const toPreload = [
+      (currentPhotoIndex + 1) % photos.length,
+      (currentPhotoIndex + 2) % photos.length,
+      (currentPhotoIndex - 1 + photos.length) % photos.length,
+    ];
+    toPreload.forEach((idx) => {
+      const img = new window.Image();
+      img.src = photos[idx].url;
+    });
+  }, [currentPhotoIndex, photos]);
+
   // Decorative hearts
   const decorativeHearts = ['💗', '💕', '💖', '💝', '💓'];
 
@@ -215,25 +229,27 @@ export default function Home() {
                             <p style={{ fontSize: '0.85rem', opacity: 0.7 }}>Foto {currentPhotoIndex + 1}</p>
                           </div>
                         ) : (
-                          <img
-                            key={currentPhotoIndex}
-                            src={photos[currentPhotoIndex].url}
-                            alt={photos[currentPhotoIndex].title}
-                            className={styles.carouselImage}
-                            onClick={() => { if (!imageLoading) { setModalImageLoading(true); setModalImageIndex(currentPhotoIndex); } }}
-                            style={{ cursor: imageLoading ? 'wait' : 'pointer', opacity: imageLoading ? 0 : 1, transition: 'opacity 0.3s ease' }}
-                            onLoad={() => setImageLoading(false)}
-                            onError={() => { setImageLoading(false); setImageError(true); }}
-                          />
-                          {!imageLoading && (
-                            <div
-                              className={styles.clickHint}
-                              onClick={() => { setModalImageLoading(true); setModalImageIndex(currentPhotoIndex); }}
-                            >
-                              <span className={styles.clickHintIcon}>🔍</span>
-                              <span>Toca para ver completa</span>
-                            </div>
-                          )}
+                          <>
+                            <img
+                              key={currentPhotoIndex}
+                              src={photos[currentPhotoIndex].url}
+                              alt={photos[currentPhotoIndex].title}
+                              className={styles.carouselImage}
+                              onClick={() => { if (!imageLoading) { setModalImageLoading(true); setModalImageIndex(currentPhotoIndex); } }}
+                              style={{ cursor: imageLoading ? 'wait' : 'pointer', opacity: imageLoading ? 0 : 1, transition: 'opacity 0.3s ease' }}
+                              onLoad={() => setImageLoading(false)}
+                              onError={() => { setImageLoading(false); setImageError(true); }}
+                            />
+                            {!imageLoading && (
+                              <div
+                                className={styles.clickHint}
+                                onClick={() => { setModalImageLoading(true); setModalImageIndex(currentPhotoIndex); }}
+                              >
+                                <span className={styles.clickHintIcon}>🔍</span>
+                                <span>Toca para ver completa</span>
+                              </div>
+                            )}
+                          </>
                         )}
                         <div className={styles.carouselCaption}>
                           <h3>{photos[currentPhotoIndex].title}</h3>
