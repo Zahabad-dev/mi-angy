@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Head from 'next/head';
 import styles from '../styles/Home.module.css';
 
@@ -43,9 +43,11 @@ export default function Home() {
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [videoPassword, setVideoPassword] = useState('');
   const [passwordError, setPasswordError] = useState(false);
-  const [imageLoading, setImageLoading] = useState(true);
-  const [modalImageLoading, setModalImageLoading] = useState(true);
+  const [imageLoading, setImageLoading] = useState(false);
+  const [modalImageLoading, setModalImageLoading] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const loadTimeoutRef = useRef(null);
+  const modalLoadTimeoutRef = useRef(null);
 
   const handleVideoDownload = () => {
     setShowPasswordModal(true);
@@ -71,26 +73,42 @@ export default function Home() {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const nextPhoto = () => {
-    if (imageLoading) return;
+  const startLoadTimeout = useCallback(() => {
+    if (loadTimeoutRef.current) clearTimeout(loadTimeoutRef.current);
+    loadTimeoutRef.current = setTimeout(() => {
+      setImageLoading(false);
+    }, 5000);
+  }, []);
+
+  const nextPhoto = useCallback(() => {
     setImageLoading(true);
     setImageError(false);
     setCurrentPhotoIndex((prev) => (prev + 1) % photos.length);
-  };
+    startLoadTimeout();
+  }, [photos.length, startLoadTimeout]);
 
-  const prevPhoto = () => {
-    if (imageLoading) return;
+  const prevPhoto = useCallback(() => {
     setImageLoading(true);
     setImageError(false);
     setCurrentPhotoIndex((prev) => (prev - 1 + photos.length) % photos.length);
-  };
+    startLoadTimeout();
+  }, [photos.length, startLoadTimeout]);
 
-  const goToPhoto = (index) => {
+  const goToPhoto = useCallback((index) => {
     if (index === currentPhotoIndex) return;
     setImageLoading(true);
     setImageError(false);
     setCurrentPhotoIndex(index);
-  };
+    startLoadTimeout();
+  }, [currentPhotoIndex, startLoadTimeout]);
+
+  // Cleanup timeouts on unmount
+  useEffect(() => {
+    return () => {
+      if (loadTimeoutRef.current) clearTimeout(loadTimeoutRef.current);
+      if (modalLoadTimeoutRef.current) clearTimeout(modalLoadTimeoutRef.current);
+    };
+  }, []);
 
   // Handle keyboard navigation
   useEffect(() => {
@@ -101,7 +119,7 @@ export default function Home() {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [photos.length]);
+  }, [nextPhoto, prevPhoto]);
 
   // Precargar fotos vecinas para navegación instantánea
   useEffect(() => {
@@ -204,9 +222,7 @@ export default function Home() {
                   <button 
                     className={styles.carouselButton + ' ' + styles.prevButton}
                     onClick={prevPhoto}
-                    disabled={imageLoading}
                     title="Foto anterior (flecha izquierda)"
-                    style={{ opacity: imageLoading ? 0.5 : 1 }}
                   >
                     ❮
                   </button>
@@ -235,10 +251,10 @@ export default function Home() {
                               src={photos[currentPhotoIndex].url}
                               alt={photos[currentPhotoIndex].title}
                               className={styles.carouselImage}
-                              onClick={() => { if (!imageLoading) { setModalImageLoading(true); setModalImageIndex(currentPhotoIndex); } }}
-                              style={{ cursor: imageLoading ? 'wait' : 'pointer', opacity: imageLoading ? 0 : 1, transition: 'opacity 0.3s ease' }}
-                              onLoad={() => setImageLoading(false)}
-                              onError={() => { setImageLoading(false); setImageError(true); }}
+                              onClick={() => { setModalImageLoading(true); setModalImageIndex(currentPhotoIndex); }}
+                              style={{ cursor: 'pointer', opacity: imageLoading ? 0 : 1, transition: 'opacity 0.3s ease' }}
+                              onLoad={() => { if (loadTimeoutRef.current) clearTimeout(loadTimeoutRef.current); setImageLoading(false); }}
+                              onError={() => { if (loadTimeoutRef.current) clearTimeout(loadTimeoutRef.current); setImageLoading(false); setImageError(true); }}
                             />
                             {!imageLoading && (
                               <div
@@ -262,9 +278,7 @@ export default function Home() {
                   <button 
                     className={styles.carouselButton + ' ' + styles.nextButton}
                     onClick={nextPhoto}
-                    disabled={imageLoading}
                     title="Próxima foto (flecha derecha)"
-                    style={{ opacity: imageLoading ? 0.5 : 1 }}
                   >
                     ❯
                   </button>
@@ -376,8 +390,8 @@ export default function Home() {
                 alt={photos[modalImageIndex].title}
                 className={styles.modalImage}
                 style={{ opacity: modalImageLoading ? 0 : 1, transition: 'opacity 0.3s ease' }}
-                onLoad={() => setModalImageLoading(false)}
-                onError={() => setModalImageLoading(false)}
+                onLoad={() => { if (modalLoadTimeoutRef.current) clearTimeout(modalLoadTimeoutRef.current); setModalImageLoading(false); }}
+                onError={() => { if (modalLoadTimeoutRef.current) clearTimeout(modalLoadTimeoutRef.current); setModalImageLoading(false); }}
               />
             </div>
             <div className={styles.modalInfo}>
@@ -390,14 +404,24 @@ export default function Home() {
             <div className={styles.modalNavigation}>
               <button 
                 className={styles.modalNavButton}
-                onClick={() => { setModalImageLoading(true); setModalImageIndex((prev) => (prev - 1 + photos.length) % photos.length); }}
+                onClick={() => {
+                  setModalImageLoading(true);
+                  setModalImageIndex((prev) => (prev - 1 + photos.length) % photos.length);
+                  if (modalLoadTimeoutRef.current) clearTimeout(modalLoadTimeoutRef.current);
+                  modalLoadTimeoutRef.current = setTimeout(() => setModalImageLoading(false), 5000);
+                }}
                 title="Anterior"
               >
                 ❮
               </button>
               <button 
                 className={styles.modalNavButton}
-                onClick={() => { setModalImageLoading(true); setModalImageIndex((prev) => (prev + 1) % photos.length); }}
+                onClick={() => {
+                  setModalImageLoading(true);
+                  setModalImageIndex((prev) => (prev + 1) % photos.length);
+                  if (modalLoadTimeoutRef.current) clearTimeout(modalLoadTimeoutRef.current);
+                  modalLoadTimeoutRef.current = setTimeout(() => setModalImageLoading(false), 5000);
+                }}
                 title="Siguiente"
               >
                 ❯
