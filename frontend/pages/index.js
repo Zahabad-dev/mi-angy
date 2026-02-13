@@ -503,7 +503,7 @@ export default function Home() {
       {/* Footer */}
       <footer className={styles.footer}>
         <p className={styles.footerText}>
-          ♥ Hecho con amor para los momentos especiales ♥
+          ♥ Durante este tiempo me lo pregunte, si era obsesión, si era ganar o si era controlar, pero nada de eso mi amor, esto en realidad fue AMOR, y el más verdadero ♥
         </p>
       </footer>
     </div>
