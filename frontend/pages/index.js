@@ -128,7 +128,7 @@ export default function Home() {
                   Descarga nuestro video especial para verlo
                 </p>
                 <a
-                  href="https://drive.google.com/LINK_PENDIENTE"
+                  href="https://drive.google.com/uc?export=download&id=1vuR9x9wOeNaOCBSwoEpF9cUcm7jsNDDu"
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{
