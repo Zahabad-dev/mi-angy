@@ -250,7 +250,7 @@ export default function Home() {
           <div className={currentStyles.titleContainer}>
             <h1 className={currentStyles.title}>Te amo con el alma Angy</h1>
           </div>
-          <p className={currentStyles.subtitle}>Solo tu y yo sabemos nuestra historia COMPAÑERA</p>
+          <p className={currentStyles.subtitle}>Sólo tú y yo sabemos nuestra historia COMPAÑERA</p>
         </div>
       </header>
 
