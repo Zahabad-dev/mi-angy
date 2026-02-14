@@ -297,7 +297,7 @@ export default function Home() {
                   </div>
                 </div>
                 <p style={{ color: '#9b7a87', marginBottom: '25px', fontSize: '1.1rem' }}>
-                  Descarga nuestro video especial para verlo
+                  Esto somos nosotros mi vida
                 </p>
                 <button
                   onClick={handleVideoDownload}
