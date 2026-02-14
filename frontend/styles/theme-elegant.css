@@ -1,0 +1,175 @@
+/* Tema Elegante - Beige, Crema y Palo de Rosa */
+
+:root.theme-elegant {
+  /* Colores principales */
+  --bg-primary: #f5f1ed;
+  --bg-secondary: #faf8f5;
+  --bg-gradient: linear-gradient(135deg, #f5f1ed 0%, #faf8f5 50%, #f9f3ee 100%);
+  
+  /* Palo de rosa */
+  --color-primary: #d4a5a5;
+  --color-primary-dark: #b88b8b;
+  --color-primary-light: #e6c9c9;
+  
+  /* Beige y crema */
+  --color-beige: #e8dfd7;
+  --color-cream: #faf6f1;
+  --color-sand: #d4c5b8;
+  
+  /* Texto */
+  --text-primary: #5a4a42;
+  --text-secondary: #8a7a72;
+  --text-light: #b8a89f;
+  
+  /* Acentos */
+  --accent-gold: #c9a87c;
+  --accent-bronze: #a67c52;
+  
+  /* Sombras elegantes */
+  --shadow-soft: 0 4px 20px rgba(212, 165, 165, 0.12);
+  --shadow-medium: 0 8px 30px rgba(212, 165, 165, 0.18);
+  --shadow-strong: 0 12px 40px rgba(212, 165, 165, 0.25);
+}
+
+body.theme-elegant {
+  background: var(--bg-gradient);
+  color: var(--text-primary);
+}
+
+/* Botones elegantes */
+.theme-elegant button {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  box-shadow: var(--shadow-soft);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.theme-elegant button:hover {
+  background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
+  box-shadow: var(--shadow-medium);
+  transform: translateY(-3px);
+}
+
+.theme-elegant button:active {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-soft);
+}
+
+/* Scrollbar elegante */
+.theme-elegant ::-webkit-scrollbar {
+  width: 10px;
+}
+
+.theme-elegant ::-webkit-scrollbar-track {
+  background: var(--color-cream);
+  border-left: 1px solid var(--color-beige);
+}
+
+.theme-elegant ::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--color-primary-light), var(--color-primary));
+  border-radius: 10px;
+}
+
+.theme-elegant ::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--color-primary), var(--color-primary-dark));
+}
+
+/* Code elegante */
+.theme-elegant code {
+  background-color: rgba(212, 165, 165, 0.1);
+  color: var(--color-primary-dark);
+  border: 1px solid var(--color-beige);
+}
+
+/* Animaciones suaves */
+@keyframes elegantFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(2deg);
+  }
+}
+
+@keyframes elegantPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+}
+
+@keyframes elegantShimmer {
+  0% {
+    background-position: -100% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Ilustraciones elegantes SVG */
+.theme-elegant .decorative-element {
+  opacity: 0.15;
+  filter: blur(0.5px);
+}
+
+.theme-elegant .elegant-ornament {
+  position: absolute;
+  opacity: 0.08;
+  pointer-events: none;
+}
+
+.theme-elegant .elegant-ornament-1 {
+  top: 10%;
+  right: 5%;
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(circle, var(--color-primary-light) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: elegantFloat 8s ease-in-out infinite;
+}
+
+.theme-elegant .elegant-ornament-2 {
+  bottom: 15%;
+  left: 8%;
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(circle, var(--accent-gold) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: elegantFloat 10s ease-in-out infinite reverse;
+}
+
+.theme-elegant .elegant-ornament-3 {
+  top: 40%;
+  left: 3%;
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(circle, var(--color-beige) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: elegantFloat 12s ease-in-out infinite;
+}
+
+/* Efectos de brillo elegante */
+.theme-elegant .shimmer-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-elegant .shimmer-effect::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 100%
+  );
+  animation: elegantShimmer 3s ease-in-out infinite;
+}

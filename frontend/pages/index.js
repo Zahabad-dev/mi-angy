@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Head from 'next/head';
 import styles from '../styles/Home.module.css';
+import elegantStyles from '../styles/Home.elegant.module.css';
 
 // Datos estáticos embebidos (sin necesidad de API)
 const generatePhotos = () => {
@@ -46,8 +47,26 @@ export default function Home() {
   const [imageLoading, setImageLoading] = useState(false);
   const [modalImageLoading, setModalImageLoading] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const [isElegant, setIsElegant] = useState(false);
   const loadTimeoutRef = useRef(null);
   const modalLoadTimeoutRef = useRef(null);
+
+  // Detectar tema al cargar
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme');
+    setIsElegant(savedTheme === 'elegant');
+    
+    const handleStorage = () => {
+      const currentTheme = localStorage.getItem('theme');
+      setIsElegant(currentTheme === 'elegant');
+    };
+    
+    window.addEventListener('storage', handleStorage);
+    return () => window.removeEventListener('storage', handleStorage);
+  }, []);
+
+  // Seleccionar estilos según tema
+  const currentStyles = isElegant ? elegantStyles : styles;
 
   const handleVideoDownload = () => {
     setShowPasswordModal(true);
@@ -139,17 +158,17 @@ export default function Home() {
   const decorativeHearts = ['💗', '💕', '💖', '💝', '💓'];
 
   return (
-    <div className={styles.container}>
+    <div className={currentStyles.container}>
       <Head>
         <title>Te amo con el alma Angy - Galería de Fotos</title>
         <meta name="description" content="Una colección de momentos especiales" />
       </Head>
       {/* Decorative background elements */}
-      <div className={styles.decorBackground}>
+      <div className={currentStyles.decorBackground}>
         {decorativeHearts.map((heart, i) => (
           <div
             key={i}
-            className={styles.heart}
+            className={currentStyles.heart}
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
@@ -163,17 +182,17 @@ export default function Home() {
       </div>
 
       {/* Header */}
-      <header className={styles.header}>
-        <div className={styles.headerContent}>
-          <div className={styles.titleContainer}>
-            <h1 className={styles.title}>Te amo con el alma Angy</h1>
+      <header className={currentStyles.header}>
+        <div className={currentStyles.headerContent}>
+          <div className={currentStyles.titleContainer}>
+            <h1 className={currentStyles.title}>Te amo con el alma Angy</h1>
           </div>
-          <p className={styles.subtitle}>Solo tu y yo sabemos nuestra historia COMPAÑERA</p>
+          <p className={currentStyles.subtitle}>Solo tu y yo sabemos nuestra historia COMPAÑERA</p>
         </div>
       </header>
 
       {/* Main Content */}
-      <div className={styles.mainContent}>
+      <div className={currentStyles.mainContent}>
         {loading ? (
           <div style={{ textAlign: 'center', padding: '60px 20px' }}>
             <div style={{ fontSize: '2rem', marginBottom: '20px' }}>Cargando momentos especiales...</div>
@@ -184,10 +203,12 @@ export default function Home() {
         ) : (
           <>
             {/* Video Download Section */}
-            <section className={styles.videoSection}>
-              <h2 className={styles.videoTitle}>Nuestra historia mi vida</h2>
-              <div className={styles.videoContainer} style={{ textAlign: 'center', padding: '40px 20px' }}>
-                <div style={{ fontSize: '4rem', marginBottom: '20px' }}>🎬</div>
+            <section className={currentStyles.videoSection}>
+              <h2 className={currentStyles.videoTitle}>Nuestra historia mi vida</h2>
+              <div className={currentStyles.videoContainer} style={{ textAlign: 'center', padding: '40px 20px' }}>
+                <div style={{ fontSize: '4rem', marginBottom: '20px' }}>
+                  {isElegant ? '🤎' : '🎬'}
+                </div>
                 <p style={{ color: '#9b7a87', marginBottom: '25px', fontSize: '1.1rem' }}>
                   Descarga nuestro video especial para verlo
                 </p>
@@ -215,31 +236,31 @@ export default function Home() {
             </section>
 
             {/* Gallery Carousel Section */}
-            <section className={styles.carouselSection}>
-              <h2 className={styles.sectionTitle}>Galería de Fotos ({photos.length})</h2>
+            <section className={currentStyles.carouselSection}>
+              <h2 className={currentStyles.sectionTitle}>Galería de Fotos ({photos.length})</h2>
               {photos.length > 0 ? (
-                <div className={styles.carouselContainer}>
+                <div className={currentStyles.carouselContainer}>
                   <button 
-                    className={styles.carouselButton + ' ' + styles.prevButton}
+                    className={currentStyles.carouselButton + ' ' + styles.prevButton}
                     onClick={prevPhoto}
                     title="Foto anterior (flecha izquierda)"
                   >
                     ❮
                   </button>
                   
-                  <div className={styles.carouselSlide}>
+                  <div className={currentStyles.carouselSlide}>
                     {photos[currentPhotoIndex] && (
-                      <div className={styles.carouselImageWrapper}>
+                      <div className={currentStyles.carouselImageWrapper}>
                         {imageLoading && (
-                          <div className={styles.imageLoader}>
-                            <div className={styles.loaderBubble}>
-                              <span className={styles.loaderHeart}>💗</span>
-                              <p className={styles.loaderText}>Cargando foto...</p>
+                          <div className={currentStyles.imageLoader}>
+                            <div className={currentStyles.loaderBubble}>
+                              <span className={currentStyles.loaderHeart}>💗</span>
+                              <p className={currentStyles.loaderText}>Cargando foto...</p>
                             </div>
                           </div>
                         )}
                         {imageError ? (
-                          <div className={styles.imageErrorFallback}>
+                          <div className={currentStyles.imageErrorFallback}>
                             <span style={{ fontSize: '3rem' }}>📷</span>
                             <p>No se pudo cargar la foto</p>
                             <p style={{ fontSize: '0.85rem', opacity: 0.7 }}>Foto {currentPhotoIndex + 1}</p>
@@ -250,7 +271,7 @@ export default function Home() {
                               key={currentPhotoIndex}
                               src={photos[currentPhotoIndex].url}
                               alt={photos[currentPhotoIndex].title}
-                              className={styles.carouselImage}
+                              className={currentStyles.carouselImage}
                               onClick={() => { setModalImageLoading(true); setModalImageIndex(currentPhotoIndex); }}
                               style={{ cursor: 'pointer', opacity: imageLoading ? 0 : 1, transition: 'opacity 0.3s ease' }}
                               onLoad={() => { if (loadTimeoutRef.current) clearTimeout(loadTimeoutRef.current); setImageLoading(false); }}
@@ -258,16 +279,16 @@ export default function Home() {
                             />
                             {!imageLoading && (
                               <div
-                                className={styles.clickHint}
+                                className={currentStyles.clickHint}
                                 onClick={() => { setModalImageLoading(true); setModalImageIndex(currentPhotoIndex); }}
                               >
-                                <span className={styles.clickHintIcon}>🔍</span>
+                                <span className={currentStyles.clickHintIcon}>🔍</span>
                                 <span>Toca para ver completa</span>
                               </div>
                             )}
                           </>
                         )}
-                        <div className={styles.carouselCaption}>
+                        <div className={currentStyles.carouselCaption}>
                           <h3>{photos[currentPhotoIndex].title}</h3>
                           <p>{photos[currentPhotoIndex].description}</p>
                         </div>
@@ -276,7 +297,7 @@ export default function Home() {
                   </div>
                   
                   <button 
-                    className={styles.carouselButton + ' ' + styles.nextButton}
+                    className={currentStyles.carouselButton + ' ' + styles.nextButton}
                     onClick={nextPhoto}
                     title="Próxima foto (flecha derecha)"
                   >
@@ -292,7 +313,7 @@ export default function Home() {
               
               {/* Carousel indicators */}
               {photos.length > 0 && (
-                <div className={styles.carouselIndicators}>
+                <div className={currentStyles.carouselIndicators}>
                   {photos.map((_, index) => (
                     <button
                       key={index}
@@ -308,13 +329,13 @@ export default function Home() {
             </section>
 
             {/* Music Section */}
-            <section className={styles.musicSection}>
-              <h2 className={styles.sectionTitle}>Banda Sonora del Amor</h2>
+            <section className={currentStyles.musicSection}>
+              <h2 className={currentStyles.sectionTitle}>Banda Sonora del Amor</h2>
               {songs.length > 0 ? (
-                <div className={styles.playlistContainer}>
-                  <div className={styles.songList}>
+                <div className={currentStyles.playlistContainer}>
+                  <div className={currentStyles.songList}>
                     {songs.map((song) => (
-                      <div key={song.id} className={styles.songCard}>
+                      <div key={song.id} className={currentStyles.songCard}>
                         <button
                           className={`${styles.playButton} ${
                             currentSongId === song.id ? styles.playing : ''
@@ -324,11 +345,11 @@ export default function Home() {
                         >
                           {currentSongId === song.id ? '⏸' : '▶'}
                         </button>
-                        <div className={styles.songInfo}>
-                          <h3 className={styles.songTitle}>{song.title}</h3>
-                          <p className={styles.songArtist}>{song.artist}</p>
+                        <div className={currentStyles.songInfo}>
+                          <h3 className={currentStyles.songTitle}>{song.title}</h3>
+                          <p className={currentStyles.songArtist}>{song.artist}</p>
                         </div>
-                        <span className={styles.songDuration}>
+                        <span className={currentStyles.songDuration}>
                           {formatDuration(song.duration)}
                         </span>
                       </div>
@@ -336,12 +357,12 @@ export default function Home() {
                   </div>
 
                   {currentSongId && (
-                    <div className={styles.playerContainer}>
-                      <div className={styles.playerTitle}>
+                    <div className={currentStyles.playerContainer}>
+                      <div className={currentStyles.playerTitle}>
                         🎵 Ahora reproduciendo: {songs.find(s => s.id === currentSongId)?.title}
                       </div>
                       <audio
-                        className={styles.audioPlayer}
+                        className={currentStyles.audioPlayer}
                         controls
                         autoPlay
                         src={songs.find(s => s.id === currentSongId)?.url}
@@ -364,12 +385,12 @@ export default function Home() {
       {/* Modal for viewing image in fullscreen */}
       {modalImageIndex !== null && photos[modalImageIndex] && (
         <div 
-          className={styles.modal}
+          className={currentStyles.modal}
           onClick={() => setModalImageIndex(null)}
         >
-          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+          <div className={currentStyles.modalContent} onClick={(e) => e.stopPropagation()}>
             <button 
-              className={styles.modalClose}
+              className={currentStyles.modalClose}
               onClick={() => setModalImageIndex(null)}
               title="Cerrar (ESC)"
             >
@@ -377,10 +398,10 @@ export default function Home() {
             </button>
             <div style={{ position: 'relative', minHeight: '200px' }}>
               {modalImageLoading && (
-                <div className={styles.imageLoader}>
-                  <div className={styles.loaderBubble}>
-                    <span className={styles.loaderHeart}>💗</span>
-                    <p className={styles.loaderText}>Cargando...</p>
+                <div className={currentStyles.imageLoader}>
+                  <div className={currentStyles.loaderBubble}>
+                    <span className={currentStyles.loaderHeart}>💗</span>
+                    <p className={currentStyles.loaderText}>Cargando...</p>
                   </div>
                 </div>
               )}
@@ -388,22 +409,22 @@ export default function Home() {
                 key={modalImageIndex}
                 src={photos[modalImageIndex].url}
                 alt={photos[modalImageIndex].title}
-                className={styles.modalImage}
+                className={currentStyles.modalImage}
                 style={{ opacity: modalImageLoading ? 0 : 1, transition: 'opacity 0.3s ease' }}
                 onLoad={() => { if (modalLoadTimeoutRef.current) clearTimeout(modalLoadTimeoutRef.current); setModalImageLoading(false); }}
                 onError={() => { if (modalLoadTimeoutRef.current) clearTimeout(modalLoadTimeoutRef.current); setModalImageLoading(false); }}
               />
             </div>
-            <div className={styles.modalInfo}>
+            <div className={currentStyles.modalInfo}>
               <h2>{photos[modalImageIndex].title}</h2>
               <p>{photos[modalImageIndex].description}</p>
-              <p className={styles.modalCounter}>
+              <p className={currentStyles.modalCounter}>
                 Foto {modalImageIndex + 1} de {photos.length}
               </p>
             </div>
-            <div className={styles.modalNavigation}>
+            <div className={currentStyles.modalNavigation}>
               <button 
-                className={styles.modalNavButton}
+                className={currentStyles.modalNavButton}
                 onClick={() => {
                   setModalImageLoading(true);
                   setModalImageIndex((prev) => (prev - 1 + photos.length) % photos.length);
@@ -415,7 +436,7 @@ export default function Home() {
                 ❮
               </button>
               <button 
-                className={styles.modalNavButton}
+                className={currentStyles.modalNavButton}
                 onClick={() => {
                   setModalImageLoading(true);
                   setModalImageIndex((prev) => (prev + 1) % photos.length);
@@ -501,11 +522,13 @@ export default function Home() {
       )}
 
       {/* Footer */}
-      <footer className={styles.footer}>
-        <p className={styles.footerText}>
+      <footer className={currentStyles.footer}>
+        <p className={currentStyles.footerText}>
           ♥ Durante este tiempo me lo pregunte, si era obsesión, si era ganar o si era controlar, pero nada de eso mi amor, esto en realidad fue AMOR, y el más verdadero, por que no hay nada más real que sentir tu piel, que estar contigo abrazados en una tarde, que vivir un amor sin aburrirme nunca, eres mi realidad ♥
         </p>
       </footer>
     </div>
   );
 }
+
+
