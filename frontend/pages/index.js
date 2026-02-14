@@ -269,8 +269,28 @@ export default function Home() {
             <section className={currentStyles.videoSection}>
               <h2 className={currentStyles.videoTitle}>Nuestra historia mi vida</h2>
               <div className={currentStyles.videoContainer} style={{ textAlign: 'center', padding: '40px 20px' }}>
-                <div style={{ fontSize: '4rem', marginBottom: '20px' }}>
-                  {isElegant ? '🤎' : '🎬'}
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '20px' }}>
+                  <div style={{
+                    fontSize: '0.85rem',
+                    color: isElegant ? '#c9a87c' : '#ec4899',
+                    animation: 'tapHintPulse 2s ease-in-out infinite',
+                    marginBottom: '8px',
+                    letterSpacing: '1px',
+                    fontWeight: '500'
+                  }}>
+                    ✨ Toca aquí ✨
+                  </div>
+                  <div 
+                    style={{ 
+                      fontSize: '4rem', 
+                      animation: 'heartBounce 1.8s ease-in-out infinite',
+                      cursor: 'pointer',
+                      filter: 'drop-shadow(0 4px 8px rgba(212, 165, 165, 0.4))'
+                    }}
+                    onClick={handleVideoDownload}
+                  >
+                    {isElegant ? '🤎' : '🎬'}
+                  </div>
                 </div>
                 <p style={{ color: '#9b7a87', marginBottom: '25px', fontSize: '1.1rem' }}>
                   Descarga nuestro video especial para verlo
