@@ -72,29 +72,35 @@ export default function Home() {
     setCurrentSongId(3);
   }, []);
   
-  // Intentar reproducir cuando el audio esté listo
+  // Reproducir automáticamente cuando el audio esté listo
+  const handleCanPlay = useCallback(() => {
+    if (audioRef.current && currentSongId) {
+      audioRef.current.play().catch(() => {});
+    }
+  }, [currentSongId]);
+
+  // Activar audio con cualquier interacción (click, scroll, toque)
   useEffect(() => {
-    if (!currentSongId) return;
-    
-    // Esperar a que el audio se renderice en el DOM
     const tryPlay = () => {
-      if (audioRef.current) {
-        audioRef.current.play().catch(() => {
-          // Autoplay bloqueado, esperar primer clic
-          const handleClick = () => {
-            if (audioRef.current) {
-              audioRef.current.play().catch(() => {});
-            }
-            document.removeEventListener('click', handleClick);
-          };
-          document.addEventListener('click', handleClick, { once: true });
-        });
+      if (audioRef.current && audioRef.current.paused && currentSongId) {
+        audioRef.current.play().catch(() => {});
       }
     };
-    
-    // Dar tiempo al DOM para renderizar el audio
-    const timer = setTimeout(tryPlay, 300);
-    return () => clearTimeout(timer);
+    document.addEventListener('click', tryPlay, { once: true });
+    document.addEventListener('scroll', tryPlay, { once: true });
+    document.addEventListener('touchstart', tryPlay, { once: true });
+    return () => {
+      document.removeEventListener('click', tryPlay);
+      document.removeEventListener('scroll', tryPlay);
+      document.removeEventListener('touchstart', tryPlay);
+    };
+  }, [currentSongId]);
+
+  // Cargar y reproducir cuando cambia la canción
+  useEffect(() => {
+    if (audioRef.current && currentSongId) {
+      audioRef.current.load();
+    }
   }, [currentSongId]);
 
   // Seleccionar estilos según tema
@@ -420,10 +426,10 @@ export default function Home() {
                       </div>
                       <audio
                         ref={audioRef}
-                        key={currentSongId}
                         className={`${currentStyles.audioPlayer} audioPlayer`}
                         controls
                         src={songs.find(s => s.id === currentSongId)?.url}
+                        onCanPlay={handleCanPlay}
                         onEnded={() => setCurrentSongId(null)}
                       />
                     </div>
