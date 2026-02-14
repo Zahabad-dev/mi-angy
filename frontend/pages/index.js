@@ -278,7 +278,7 @@ export default function Home() {
                     letterSpacing: '1px',
                     fontWeight: '500'
                   }}>
-                    ✨ Toca aquí ✨
+                    ✨ Toca para escuchar ✨
                   </div>
                   <div 
                     style={{ 
@@ -287,7 +287,11 @@ export default function Home() {
                       cursor: 'pointer',
                       filter: 'drop-shadow(0 4px 8px rgba(212, 165, 165, 0.4))'
                     }}
-                    onClick={handleVideoDownload}
+                    onClick={() => {
+                      if (audioRef.current && audioRef.current.paused) {
+                        audioRef.current.play().catch(() => {});
+                      }
+                    }}
                   >
                     {isElegant ? '🤎' : '🎬'}
                   </div>
