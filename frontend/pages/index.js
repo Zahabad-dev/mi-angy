@@ -23,7 +23,8 @@ const staticSongs = [
   { id: 2, title: 'Andrea', artist: 'Bad Bunny', url: '/audio/Bad Bunny - Andrea.mp3', duration: 210 },
   { id: 3, title: 'Departamento', artist: 'Bandalos Chinos', url: '/audio/Bandalos Chinos - Departamento.mp3', duration: 180 },
   { id: 4, title: 'Inevitable', artist: 'Camilo Séptimo', url: '/audio/Camilo Séptimo - Inevitable.mp3', duration: 200 },
-  { id: 5, title: 'Vida En El Espejo', artist: 'Enjambre', url: '/audio/Enjambre - Vida En El Espejo.mp3', duration: 250 }
+  { id: 5, title: 'Vida En El Espejo', artist: 'Enjambre', url: '/audio/Enjambre - Vida En El Espejo.mp3', duration: 250 },
+  { id: 6, title: 'El Club de la Montaña', artist: 'Bandalos Chinos', url: '/audio/Bandalos chinos - El Club de la Montaña.mp3', duration: 220 }
 ];
 const staticVideo = {
   id: 1,
@@ -47,23 +48,54 @@ export default function Home() {
   const [imageLoading, setImageLoading] = useState(false);
   const [modalImageLoading, setModalImageLoading] = useState(false);
   const [imageError, setImageError] = useState(false);
-  const [isElegant, setIsElegant] = useState(false);
+  const [isElegant, setIsElegant] = useState(true); // Elegante por defecto
   const loadTimeoutRef = useRef(null);
   const modalLoadTimeoutRef = useRef(null);
+  const audioRef = useRef(null);
 
   // Detectar tema al cargar
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme');
-    setIsElegant(savedTheme === 'elegant');
+    setIsElegant(savedTheme !== 'default'); // Elegante por defecto
     
     const handleStorage = () => {
       const currentTheme = localStorage.getItem('theme');
-      setIsElegant(currentTheme === 'elegant');
+      setIsElegant(currentTheme !== 'default');
     };
     
     window.addEventListener('storage', handleStorage);
     return () => window.removeEventListener('storage', handleStorage);
   }, []);
+
+  // Música de fondo automática - Departamento
+  useEffect(() => {
+    setCurrentSongId(3);
+  }, []);
+  
+  // Intentar reproducir cuando el audio esté listo
+  useEffect(() => {
+    if (!currentSongId) return;
+    
+    // Esperar a que el audio se renderice en el DOM
+    const tryPlay = () => {
+      if (audioRef.current) {
+        audioRef.current.play().catch(() => {
+          // Autoplay bloqueado, esperar primer clic
+          const handleClick = () => {
+            if (audioRef.current) {
+              audioRef.current.play().catch(() => {});
+            }
+            document.removeEventListener('click', handleClick);
+          };
+          document.addEventListener('click', handleClick, { once: true });
+        });
+      }
+    };
+    
+    // Dar tiempo al DOM para renderizar el audio
+    const timer = setTimeout(tryPlay, 300);
+    return () => clearTimeout(timer);
+  }, [currentSongId]);
 
   // Seleccionar estilos según tema
   const currentStyles = isElegant ? elegantStyles : styles;
@@ -72,6 +104,19 @@ export default function Home() {
     setShowPasswordModal(true);
     setVideoPassword('');
     setPasswordError(false);
+    
+    // Fade out del audio del reproductor
+    const audioElements = document.querySelectorAll('audio.audioPlayer');
+    audioElements.forEach(audio => {
+      const fadeOutInterval = setInterval(() => {
+        if (audio.volume > 0.05) {
+          audio.volume = Math.max(0, audio.volume - 0.05);
+        } else {
+          audio.volume = 0;
+          clearInterval(fadeOutInterval);
+        }
+      }, 100);
+    });
   };
 
   const checkPassword = () => {
@@ -80,6 +125,17 @@ export default function Home() {
       setVideoPassword('');
       setPasswordError(false);
       window.open('https://drive.google.com/uc?export=download&id=1vuR9x9wOeNaOCBSwoEpF9cUcm7jsNDDu', '_blank');
+      // Fade in del audio del reproductor
+      const audioElements = document.querySelectorAll('audio.audioPlayer');
+      audioElements.forEach(audio => {
+        const fadeInInterval = setInterval(() => {
+          if (audio.volume < 0.95) {
+            audio.volume = Math.min(1, audio.volume + 0.05);
+          } else {
+            clearInterval(fadeInInterval);
+          }
+        }, 100);
+      });
     } else {
       setPasswordError(true);
     }
@@ -163,6 +219,7 @@ export default function Home() {
         <title>Te amo con el alma Angy - Galería de Fotos</title>
         <meta name="description" content="Una colección de momentos especiales" />
       </Head>
+      
       {/* Decorative background elements */}
       <div className={currentStyles.decorBackground}>
         {decorativeHearts.map((heart, i) => (
@@ -330,7 +387,7 @@ export default function Home() {
 
             {/* Music Section */}
             <section className={currentStyles.musicSection}>
-              <h2 className={currentStyles.sectionTitle}>Banda Sonora del Amor</h2>
+              <h2 className={currentStyles.sectionTitle}>Nuestra Selección mi flaquita</h2>
               {songs.length > 0 ? (
                 <div className={currentStyles.playlistContainer}>
                   <div className={currentStyles.songList}>
@@ -362,9 +419,10 @@ export default function Home() {
                         🎵 Ahora reproduciendo: {songs.find(s => s.id === currentSongId)?.title}
                       </div>
                       <audio
-                        className={currentStyles.audioPlayer}
+                        ref={audioRef}
+                        key={currentSongId}
+                        className={`${currentStyles.audioPlayer} audioPlayer`}
                         controls
-                        autoPlay
                         src={songs.find(s => s.id === currentSongId)?.url}
                         onEnded={() => setCurrentSongId(null)}
                       />
@@ -460,7 +518,20 @@ export default function Home() {
             background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center',
             justifyContent: 'center', zIndex: 10000
           }}
-          onClick={() => setShowPasswordModal(false)}
+          onClick={() => {
+            setShowPasswordModal(false);
+            // Fade in del audio al cancelar
+            const audioElements = document.querySelectorAll('audio.audioPlayer');
+            audioElements.forEach(audio => {
+              const fadeInInterval = setInterval(() => {
+                if (audio.volume < 0.95) {
+                  audio.volume = Math.min(1, audio.volume + 0.05);
+                } else {
+                  clearInterval(fadeInInterval);
+                }
+              }, 100);
+            });
+          }}
         >
           <div 
             style={{
@@ -472,7 +543,20 @@ export default function Home() {
             onClick={(e) => e.stopPropagation()}
           >
             <button
-              onClick={() => setShowPasswordModal(false)}
+              onClick={() => {
+                setShowPasswordModal(false);
+                // Fade in del audio al cerrar con X
+                const audioElements = document.querySelectorAll('audio.audioPlayer');
+                audioElements.forEach(audio => {
+                  const fadeInInterval = setInterval(() => {
+                    if (audio.volume < 0.95) {
+                      audio.volume = Math.min(1, audio.volume + 0.05);
+                    } else {
+                      clearInterval(fadeInInterval);
+                    }
+                  }, 100);
+                });
+              }}
               style={{
                 position: 'absolute', top: '10px', right: '15px',
                 background: 'none', border: 'none', fontSize: '1.5rem',

@@ -9,12 +9,12 @@ import ThemeToggle from '../components/ThemeToggle';
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
-  const [isElegant, setIsElegant] = useState(false);
+  const [isElegant, setIsElegant] = useState(true); // Elegante por defecto
 
   useEffect(() => {
-    // Detectar tema guardado
+    // Detectar tema guardado, por defecto elegante
     const savedTheme = localStorage.getItem('theme');
-    setIsElegant(savedTheme === 'elegant');
+    setIsElegant(savedTheme !== 'default');
   }, []);
 
   // Seleccionar estilos según tema
@@ -35,7 +35,7 @@ function MyApp({ Component, pageProps }) {
             >
               Galería
             </Link>
-            <ThemeToggle />
+            {/* <ThemeToggle /> */}
           </div>
         </div>
       </nav>

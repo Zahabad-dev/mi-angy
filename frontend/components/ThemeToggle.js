@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react';
 
 export default function ThemeToggle() {
-  const [isElegant, setIsElegant] = useState(false);
+  const [isElegant, setIsElegant] = useState(true); // Elegante por defecto
 
   useEffect(() => {
-    // Cargar tema guardado
+    // Cargar tema guardado, por defecto elegante
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'elegant') {
+    if (savedTheme === 'default') {
+      setIsElegant(false);
+      removeElegantTheme();
+    } else {
       setIsElegant(true);
       applyElegantTheme();
     }
