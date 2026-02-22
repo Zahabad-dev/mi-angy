@@ -5,7 +5,12 @@ export default function WelcomeScreen({ onClose }) {
   const [isVisible, setIsVisible] = useState(true);
   const [fadeOut, setFadeOut] = useState(false);
 
+  useEffect(() => {
+    console.log('💕 Modal de bienvenida montado!');
+  }, []);
+
   const handleClose = () => {
+    console.log('💕 Cerrando modal...');
     setFadeOut(true);
     setTimeout(() => {
       setIsVisible(false);

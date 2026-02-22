@@ -19,10 +19,12 @@ function MyApp({ Component, pageProps }) {
     setIsElegant(savedTheme !== 'default');
 
     // Mostrar pantalla de bienvenida SIEMPRE que se recargue la página
+    console.log('🎵 Activando modal de bienvenida...');
     setShowWelcome(true);
   }, []);
 
   const handleWelcomeClose = () => {
+    console.log('🎵 Cerrando modal y navegando a La Rumbossa...');
     setShowWelcome(false);
     // Scroll suave al video de La Rumbossa
     setTimeout(() => {
