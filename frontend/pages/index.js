@@ -52,7 +52,6 @@ export default function Home() {
   const loadTimeoutRef = useRef(null);
   const modalLoadTimeoutRef = useRef(null);
   const audioRef = useRef(null);
-  const laRumbossaVideoRef = useRef(null);
 
   // Detectar tema al cargar
   useEffect(() => {
@@ -81,13 +80,8 @@ export default function Home() {
   }, [currentSongId]);
 
   // Activar audio con cualquier interacción (click, scroll, toque)
-  // PERO NO si el video de La Rumbossa está reproduciéndose
   useEffect(() => {
     const tryPlay = () => {
-      // No reproducir música si el video está activo
-      if (laRumbossaVideoRef.current && !laRumbossaVideoRef.current.paused) {
-        return;
-      }
       if (audioRef.current && audioRef.current.paused && currentSongId) {
         audioRef.current.play().catch(() => {});
       }
@@ -109,21 +103,11 @@ export default function Home() {
     }
   }, [currentSongId]);
 
-  // Manejar pausa de música cuando el video de La Rumbossa se reproduce
-  const handleVideoPlay = () => {
-    // Pausar la música de fondo cuando el video empieza
+  // Pausar música para ver el video
+  const handlePauseMusicForVideo = () => {
     if (audioRef.current && !audioRef.current.paused) {
       audioRef.current.pause();
     }
-  };
-
-  const handleVideoPause = () => {
-    // NO reanudar automáticamente la música cuando se pausa
-    // Solo si el usuario hace clic en algún lugar
-  };
-
-  const handleVideoEnded = () => {
-    // NO reanudar automáticamente la música cuando termina el video
   };
 
   // Seleccionar estilos según tema
@@ -430,31 +414,56 @@ export default function Home() {
                   display: 'flex',
                   justifyContent: 'center',
                   alignItems: 'center',
-                  marginBottom: '20px',
+                  marginBottom: '15px',
                   fontSize: '3rem',
                   animation: 'swing 2s ease-in-out infinite'
                 }}>
                   🎶
                 </div>
-                <video
-                  ref={laRumbossaVideoRef}
-                  controls
-                  onPlay={handleVideoPlay}
-                  onPause={handleVideoPause}
-                  onEnded={handleVideoEnded}
+                
+                {/* Botón para pausar música antes de ver el video */}
+                <button
+                  onClick={handlePauseMusicForVideo}
                   style={{
-                    width: '100%',
-                    maxWidth: '700px',
-                    borderRadius: '15px',
-                    boxShadow: '0 8px 25px rgba(139, 69, 19, 0.3)',
                     display: 'block',
-                    margin: '0 auto',
-                    border: '4px solid rgba(201, 168, 124, 0.4)'
+                    margin: '0 auto 20px',
+                    background: 'linear-gradient(135deg, #c9a87c 0%, #a08860 100%)',
+                    color: 'white',
+                    border: 'none',
+                    padding: '10px 25px',
+                    borderRadius: '25px',
+                    fontSize: '0.95rem',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 15px rgba(201, 168, 124, 0.4)',
+                    transition: 'all 0.3s ease'
                   }}
                 >
-                  <source src="/videos/La Rumbossa - Alvaro Ruiz.mp4" type="video/mp4" />
-                  Tu navegador no soporta el elemento de video.
-                </video>
+                  🔇 Pausar música para ver el video
+                </button>
+
+                <div style={{
+                  position: 'relative',
+                  width: '100%',
+                  maxWidth: '700px',
+                  margin: '0 auto',
+                  borderRadius: '15px',
+                  overflow: 'hidden',
+                  boxShadow: '0 8px 25px rgba(139, 69, 19, 0.3)',
+                  border: '4px solid rgba(201, 168, 124, 0.4)',
+                  aspectRatio: '16/9'
+                }}>
+                  <iframe
+                    src="https://drive.google.com/file/d/1vuR9x9wOeNaOCBSwoEpF9cUcm7jsNDDu/preview"
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      border: 'none'
+                    }}
+                    allow="autoplay; encrypted-media"
+                    allowFullScreen
+                  />
+                </div>
                 <p style={{
                   textAlign: 'center',
                   color: '#a08860',
