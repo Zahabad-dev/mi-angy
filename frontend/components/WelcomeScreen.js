@@ -53,6 +53,9 @@ export default function WelcomeScreen({ onClose }) {
             🏠 La imagen la elegí porque es sábado, y recuerdo nuestros fines de semana, 
             éramos tú y yo, durmiendo en sábanas blancas con humo, risas y pasión.
           </p>
+          <p className={styles.extraText}>
+            💕 Elegí una canción con amor y otra del reggaetón que me recuerda a ti...
+          </p>
         </div>
 
         <div className={styles.musicNote}>
@@ -60,6 +63,18 @@ export default function WelcomeScreen({ onClose }) {
           <span className={styles.songTitle}>La Rumbossa</span>
           <span className={styles.divider}>•</span>
           <span className={styles.artistName}>Álvaro Ruiz</span>
+        </div>
+
+        <div className={styles.videoSection}>
+          <p className={styles.videoLabel}>🎬 Canción especial en video:</p>
+          <a 
+            href="https://drive.google.com/file/d/1x3EMLHtAhlGS0Ybr706Ji-ekO_Ml4-6U/view?usp=sharing" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className={styles.videoLink}
+          >
+            ▶️ Ver canción en video
+          </a>
         </div>
 
         <button className={styles.closeButton} onClick={handleClose}>
