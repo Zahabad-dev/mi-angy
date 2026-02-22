@@ -67,36 +67,12 @@ export default function Home() {
     return () => window.removeEventListener('storage', handleStorage);
   }, []);
 
-  // Música de fondo automática - Departamento
+  // Música de fondo - Departamento (solo se activa con clic en el corazón)
   useEffect(() => {
     setCurrentSongId(3);
   }, []);
   
-  // Reproducir automáticamente cuando el audio esté listo
-  const handleCanPlay = useCallback(() => {
-    if (audioRef.current && currentSongId) {
-      audioRef.current.play().catch(() => {});
-    }
-  }, [currentSongId]);
-
-  // Activar audio con cualquier interacción (click, scroll, toque)
-  useEffect(() => {
-    const tryPlay = () => {
-      if (audioRef.current && audioRef.current.paused && currentSongId) {
-        audioRef.current.play().catch(() => {});
-      }
-    };
-    document.addEventListener('click', tryPlay, { once: true });
-    document.addEventListener('scroll', tryPlay, { once: true });
-    document.addEventListener('touchstart', tryPlay, { once: true });
-    return () => {
-      document.removeEventListener('click', tryPlay);
-      document.removeEventListener('scroll', tryPlay);
-      document.removeEventListener('touchstart', tryPlay);
-    };
-  }, [currentSongId]);
-
-  // Cargar y reproducir cuando cambia la canción
+  // Cargar la canción cuando cambia
   useEffect(() => {
     if (audioRef.current && currentSongId) {
       audioRef.current.load();
@@ -607,7 +583,6 @@ export default function Home() {
                         className={`${currentStyles.audioPlayer} audioPlayer`}
                         controls
                         src={songs.find(s => s.id === currentSongId)?.url}
-                        onCanPlay={handleCanPlay}
                         onEnded={() => setCurrentSongId(null)}
                       />
                     </div>
