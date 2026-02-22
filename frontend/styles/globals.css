@@ -132,3 +132,24 @@ code {
     transform: translateY(-3px);
   }
 }
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 4px 15px rgba(201, 168, 124, 0.4);
+  }
+  50% {
+    box-shadow: 0 4px 25px rgba(201, 168, 124, 0.7);
+  }
+}
+
+@keyframes swing {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(10deg);
+  }
+  75% {
+    transform: rotate(-10deg);
+  }
+}

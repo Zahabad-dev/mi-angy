@@ -6,22 +6,39 @@ import { useState, useEffect } from 'react';
 import styles from '../styles/Nav.module.css';
 import elegantStyles from '../styles/Nav.elegant.module.css';
 import ThemeToggle from '../components/ThemeToggle';
+import WelcomeScreen from '../components/WelcomeScreen';
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const [isElegant, setIsElegant] = useState(true); // Elegante por defecto
+  const [showWelcome, setShowWelcome] = useState(false);
 
   useEffect(() => {
     // Detectar tema guardado, por defecto elegante
     const savedTheme = localStorage.getItem('theme');
     setIsElegant(savedTheme !== 'default');
+
+    // Mostrar pantalla de bienvenida SIEMPRE que se recargue la página
+    setShowWelcome(true);
   }, []);
+
+  const handleWelcomeClose = () => {
+    setShowWelcome(false);
+    // Scroll suave al video de La Rumbossa
+    setTimeout(() => {
+      const specialSection = document.querySelector('[data-special-song]');
+      if (specialSection) {
+        specialSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 300);
+  };
 
   // Seleccionar estilos según tema
   const navStyles = isElegant ? elegantStyles : styles;
 
   return (
     <>
+      {showWelcome && <WelcomeScreen onClose={handleWelcomeClose} />}
       <nav className={navStyles.navbar}>
         <div className={navStyles.navContainer}>
           <Link href="/" className={navStyles.logo}>

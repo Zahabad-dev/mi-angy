@@ -1,0 +1,340 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(139, 69, 19, 0.97) 0%, rgba(77, 38, 10, 0.97) 100%);
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.overlay.fadeOut {
+  animation: fadeOutOverlay 0.8s ease-out forwards;
+}
+
+.content {
+  background: linear-gradient(135deg, #f5e6d3 0%, #e8d4bf 100%);
+  border-radius: 30px;
+  padding: 50px 40px;
+  max-width: 600px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  position: relative;
+  animation: slideUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border: 3px solid rgba(201, 168, 124, 0.5);
+}
+
+.closeX {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(139, 69, 19, 0.1);
+  color: #8b4513;
+  border: 2px solid rgba(139, 69, 19, 0.3);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  padding: 0;
+  box-shadow: 0 2px 8px rgba(139, 69, 19, 0.2);
+}
+
+.closeX:hover {
+  background: rgba(139, 69, 19, 0.2);
+  transform: rotate(90deg) scale(1.1);
+  box-shadow: 0 4px 12px rgba(139, 69, 19, 0.3);
+}
+
+.content.contentFadeOut {
+  animation: slideDown 0.8s ease-out forwards;
+}
+
+.hearts {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 20px;
+}
+
+.heart1, .heart2, .heart3 {
+  font-size: 2.5rem;
+  animation: float 3s ease-in-out infinite;
+  filter: drop-shadow(0 4px 8px rgba(139, 69, 19, 0.3));
+}
+
+.heart1 {
+  animation-delay: 0s;
+}
+
+.heart2 {
+  animation-delay: 0.5s;
+}
+
+.heart3 {
+  animation-delay: 1s;
+}
+
+.title {
+  font-size: 2.5rem;
+  color: #8b4513;
+  margin-bottom: 30px;
+  font-weight: 700;
+  text-shadow: 2px 2px 4px rgba(139, 69, 19, 0.2);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #c9a87c 0%, #a08860 100%);
+  color: #fff;
+  padding: 12px 30px;
+  border-radius: 25px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 15px rgba(201, 168, 124, 0.4);
+  animation: glow 2s ease-in-out infinite;
+}
+
+.message {
+  background: rgba(255, 255, 255, 0.7);
+  border-left: 4px solid #c9a87c;
+  padding: 25px;
+  border-radius: 15px;
+  margin: 30px 0;
+  box-shadow: 0 4px 10px rgba(139, 69, 19, 0.1);
+}
+
+.specialText {
+  font-size: 1.15rem;
+  line-height: 1.8;
+  color: #5c3d2e;
+  font-style: italic;
+  margin: 0;
+  font-weight: 500;
+}
+
+.imageMessage {
+  margin: 25px 0;
+}
+
+.imageLegend {
+  background: linear-gradient(135deg, rgba(201, 168, 124, 0.15) 0%, rgba(160, 136, 96, 0.1) 100%);
+  border: 2px solid rgba(201, 168, 124, 0.25);
+  border-radius: 15px;
+  padding: 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  box-shadow: 0 3px 10px rgba(139, 69, 19, 0.08);
+}
+
+.legendIcon {
+  font-size: 2rem;
+  flex-shrink: 0;
+  animation: float 3s ease-in-out infinite;
+  filter: drop-shadow(0 2px 4px rgba(139, 69, 19, 0.2));
+}
+
+.legendText {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: #5c3d2e;
+  margin: 0;
+  font-weight: 400;
+  text-align: left;
+}
+
+.musicNote {
+  margin: 30px 0;
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(201, 168, 124, 0.2) 0%, rgba(160, 136, 96, 0.2) 100%);
+  border-radius: 20px;
+  border: 2px solid rgba(201, 168, 124, 0.3);
+}
+
+.noteIcon {
+  font-size: 3rem;
+  margin-bottom: 10px;
+  animation: swing 2s ease-in-out infinite;
+}
+
+.songTitle {
+  font-size: 1.8rem;
+  color: #8b4513;
+  font-weight: 700;
+  margin: 10px 0 5px;
+}
+
+.artistName {
+  font-size: 1.2rem;
+  color: #a08860;
+  margin: 0;
+  font-weight: 500;
+}
+
+.closeButton {
+  background: linear-gradient(135deg, #8b4513 0%, #5c3d2e 100%);
+  color: white;
+  border: none;
+  padding: 16px 35px;
+  font-size: 1.15rem;
+  border-radius: 30px;
+  cursor: pointer;
+  margin-top: 25px;
+  font-weight: 600;
+  box-shadow: 0 6px 20px rgba(139, 69, 19, 0.4);
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.closeButton:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(139, 69, 19, 0.5);
+  background: linear-gradient(135deg, #5c3d2e 0%, #8b4513 100%);
+}
+
+.closeButton:active {
+  transform: translateY(-1px);
+}
+
+.arrow {
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.closeButton:hover .arrow {
+  transform: translateX(5px);
+}
+
+/* Responsive */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOutOverlay {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  to {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 4px 15px rgba(201, 168, 124, 0.4);
+  }
+  50% {
+    box-shadow: 0 4px 25px rgba(201, 168, 124, 0.7);
+  }
+}
+
+@keyframes swing {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(10deg);
+  }
+  75% {
+    transform: rotate(-10deg);
+  }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .content {
+    padding: 40px 25px;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .specialText {
+    font-size: 1rem;
+  }
+
+  .legendText {
+    font-size: 0.95rem;
+  }
+
+  .legendIcon {
+    font-size: 1.5rem;
+  }
+
+  .imageLegend {
+    padding: 15px;
+    gap: 10px;
+  }
+
+  .songTitle {
+    font-size: 1.5rem;
+  }
+
+  .artistName {
+    font-size: 1rem;
+  }
+
+  .hearts {
+    gap: 15px;
+  }
+
+  .heart1, .heart2, .heart3 {
+    font-size: 2rem;
+  }
+}

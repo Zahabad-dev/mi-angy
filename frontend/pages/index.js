@@ -52,6 +52,7 @@ export default function Home() {
   const loadTimeoutRef = useRef(null);
   const modalLoadTimeoutRef = useRef(null);
   const audioRef = useRef(null);
+  const laRumbossaVideoRef = useRef(null);
 
   // Detectar tema al cargar
   useEffect(() => {
@@ -80,8 +81,13 @@ export default function Home() {
   }, [currentSongId]);
 
   // Activar audio con cualquier interacción (click, scroll, toque)
+  // PERO NO si el video de La Rumbossa está reproduciéndose
   useEffect(() => {
     const tryPlay = () => {
+      // No reproducir música si el video está activo
+      if (laRumbossaVideoRef.current && !laRumbossaVideoRef.current.paused) {
+        return;
+      }
       if (audioRef.current && audioRef.current.paused && currentSongId) {
         audioRef.current.play().catch(() => {});
       }
@@ -102,6 +108,23 @@ export default function Home() {
       audioRef.current.load();
     }
   }, [currentSongId]);
+
+  // Manejar pausa de música cuando el video de La Rumbossa se reproduce
+  const handleVideoPlay = () => {
+    // Pausar la música de fondo cuando el video empieza
+    if (audioRef.current && !audioRef.current.paused) {
+      audioRef.current.pause();
+    }
+  };
+
+  const handleVideoPause = () => {
+    // NO reanudar automáticamente la música cuando se pausa
+    // Solo si el usuario hace clic en algún lugar
+  };
+
+  const handleVideoEnded = () => {
+    // NO reanudar automáticamente la música cuando termina el video
+  };
 
   // Seleccionar estilos según tema
   const currentStyles = isElegant ? elegantStyles : styles;
@@ -319,6 +342,128 @@ export default function Home() {
                 >
                   💝 Descargar Video
                 </button>
+              </div>
+            </section>
+
+            {/* Special Song Section - La Rumbossa */}
+            <section 
+              className={currentStyles.specialSongSection} 
+              data-special-song="true"
+              style={{
+              background: 'linear-gradient(135deg, rgba(139, 69, 19, 0.08) 0%, rgba(77, 38, 10, 0.05) 100%)',
+              padding: '60px 20px',
+              borderRadius: '30px',
+              margin: '40px auto',
+              maxWidth: '900px',
+              border: '3px solid rgba(201, 168, 124, 0.3)',
+              boxShadow: '0 10px 40px rgba(139, 69, 19, 0.15)'
+            }}>
+              <div style={{ textAlign: 'center', marginBottom: '30px' }}>
+                <div style={{
+                  display: 'inline-block',
+                  background: 'linear-gradient(135deg, #c9a87c 0%, #a08860 100%)',
+                  color: 'white',
+                  padding: '10px 25px',
+                  borderRadius: '20px',
+                  fontSize: '0.9rem',
+                  fontWeight: '600',
+                  marginBottom: '20px',
+                  boxShadow: '0 4px 15px rgba(201, 168, 124, 0.4)',
+                  animation: 'glow 2s ease-in-out infinite'
+                }}>
+                  🎵 CANCIÓN ESPECIAL 🎵
+                </div>
+                <h2 style={{
+                  fontSize: '2.5rem',
+                  color: '#8b4513',
+                  marginBottom: '15px',
+                  fontWeight: '700'
+                }}>
+                  La Rumbossa
+                </h2>
+                <p style={{
+                  fontSize: '1.3rem',
+                  color: '#a08860',
+                  marginBottom: '30px',
+                  fontWeight: '500'
+                }}>
+                  Álvaro Ruiz
+                </p>
+              </div>
+
+              <div style={{
+                background: 'rgba(255, 255, 255, 0.7)',
+                borderLeft: '5px solid #c9a87c',
+                padding: '30px',
+                borderRadius: '15px',
+                marginBottom: '40px',
+                boxShadow: '0 4px 20px rgba(139, 69, 19, 0.1)'
+              }}>
+                <div style={{
+                  fontSize: '2.5rem',
+                  textAlign: 'center',
+                  marginBottom: '20px'
+                }}>
+                  💕
+                </div>
+                <p style={{
+                  fontSize: '1.25rem',
+                  lineHeight: '1.9',
+                  color: '#5c3d2e',
+                  fontStyle: 'italic',
+                  textAlign: 'center',
+                  margin: 0,
+                  fontWeight: '500'
+                }}>
+                  "Esta canción identifica mi amor, lo que siento y como llega en lo hondo de mi ser, 
+                  mi ser amado que tanto quiero vivir con él."
+                </p>
+              </div>
+
+              <div style={{
+                background: 'linear-gradient(135deg, rgba(245, 230, 211, 0.6) 0%, rgba(232, 212, 191, 0.6) 100%)',
+                borderRadius: '20px',
+                padding: '30px',
+                boxShadow: '0 8px 30px rgba(139, 69, 19, 0.2)'
+              }}>
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginBottom: '20px',
+                  fontSize: '3rem',
+                  animation: 'swing 2s ease-in-out infinite'
+                }}>
+                  🎶
+                </div>
+                <video
+                  ref={laRumbossaVideoRef}
+                  controls
+                  onPlay={handleVideoPlay}
+                  onPause={handleVideoPause}
+                  onEnded={handleVideoEnded}
+                  style={{
+                    width: '100%',
+                    maxWidth: '700px',
+                    borderRadius: '15px',
+                    boxShadow: '0 8px 25px rgba(139, 69, 19, 0.3)',
+                    display: 'block',
+                    margin: '0 auto',
+                    border: '4px solid rgba(201, 168, 124, 0.4)'
+                  }}
+                >
+                  <source src="/videos/La Rumbossa - Alvaro Ruiz.mp4" type="video/mp4" />
+                  Tu navegador no soporta el elemento de video.
+                </video>
+                <p style={{
+                  textAlign: 'center',
+                  color: '#a08860',
+                  marginTop: '20px',
+                  fontSize: '0.95rem',
+                  fontStyle: 'italic'
+                }}>
+                  Reproduce este video para sentir lo que hay en mi corazón 💝
+                </p>
               </div>
             </section>
 
