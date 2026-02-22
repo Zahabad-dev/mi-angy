@@ -49,23 +49,17 @@ export default function WelcomeScreen({ onClose }) {
             "Esta canción identifica mi amor, lo que siento y como llega en lo hondo de mi ser, 
             mi ser amado que tanto quiero vivir con él."
           </p>
-        </div>
-
-        <div className={styles.imageMessage}>
-          <div className={styles.imageLegend}>
-            <span className={styles.legendIcon}>🏠</span>
-            <p className={styles.legendText}>
-              La imagen la elegí porque es sábado, y recuerdo nuestros fines de semana con todo pasando 
-              alrededor nuestro, nada importaba en esa habitación, éramos tú y yo, durmiendo en sábanas 
-              blancas con un humo y una dosis de risas más pasión.
-            </p>
-          </div>
+          <p className={styles.legendText}>
+            🏠 La imagen la elegí porque es sábado, y recuerdo nuestros fines de semana, 
+            éramos tú y yo, durmiendo en sábanas blancas con humo, risas y pasión.
+          </p>
         </div>
 
         <div className={styles.musicNote}>
-          <div className={styles.noteIcon}>🎶</div>
-          <p className={styles.songTitle}>La Rumbossa</p>
-          <p className={styles.artistName}>Álvaro Ruiz</p>
+          <span className={styles.noteIcon}>🎶</span>
+          <span className={styles.songTitle}>La Rumbossa</span>
+          <span className={styles.divider}>•</span>
+          <span className={styles.artistName}>Álvaro Ruiz</span>
         </div>
 
         <button className={styles.closeButton} onClick={handleClose}>
