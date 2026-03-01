@@ -7,6 +7,7 @@ import styles from '../styles/Nav.module.css';
 import elegantStyles from '../styles/Nav.elegant.module.css';
 import ThemeToggle from '../components/ThemeToggle';
 import WelcomeScreen from '../components/WelcomeScreen';
+import { Analytics } from '@vercel/analytics/next';
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
@@ -59,6 +60,7 @@ function MyApp({ Component, pageProps }) {
         </div>
       </nav>
       <Component {...pageProps} />
+      <Analytics />
     </>
   );
 }
